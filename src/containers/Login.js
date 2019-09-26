@@ -3,16 +3,17 @@ import "./Login.css";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Auth } from "aws-amplify";
-import LoaderButton from "../components/LoaderButton"
+import LoaderButton from "../components/LoaderButton";
 import { Link } from "react-router-dom";
 import { Panel } from "react-bootstrap"
 
 
 const LoginSchema = Yup.object().shape({
     email: Yup.string()
-      .required('Required'),
+        . email('Invalid email')
+        .required('Required'),
     password: Yup.string()
-      .required('Required'),
+        .required('Required'),
 });
 
 export default class Login extends Component {

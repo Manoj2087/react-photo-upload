@@ -5,6 +5,8 @@ import PageNotFound from "./containers/PageNotFound";
 import Login from "./containers/Login";
 import AppliedRoute from "./components/AppliedRoute";
 import ResetPassword from "./containers/ResetPassword";
+import SignUp from "./containers/SignUp";
+import VerifySignUp from "./containers/VerifySignUp";
 
 export default function Routes({ childProps }) {
     return (
@@ -12,6 +14,8 @@ export default function Routes({ childProps }) {
             <AppliedRoute path="/" exact component={Home} props={childProps} />
             <AppliedRoute path="/login" exact component={ Login } props={childProps} />
             <AppliedRoute path="/login/reset" exact component={ ResetPassword } props={childProps} />
+            <AppliedRoute path="/signup" exact component={ SignUp } props={childProps} />
+            <AppliedRoute path="/signup/verify" exact component={ VerifySignUp } props={childProps} />
             {/* Finally, catch all unmatched routes */}
             <Route component={ PageNotFound } />
         </Switch>

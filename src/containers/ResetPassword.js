@@ -19,7 +19,7 @@ const ConfirmationFormSchema = Yup.object().shape({
     password: Yup.string()
         .required('Required'),
     confirmPassword: Yup.string()
-        .oneOf([Yup.ref('password'), null], 'Passwords must match')
+        .oneOf([Yup.ref('password'), null], 'Passwords must match'),
 });
 
 
