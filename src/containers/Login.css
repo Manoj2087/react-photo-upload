@@ -1,0 +1,13 @@
+.Login {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.panel-title {
+    font-size: 20px;
+    text-align: center;
+}
+
+p {
+    margin-bottom: 20px;
+}
