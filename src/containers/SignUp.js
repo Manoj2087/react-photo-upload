@@ -52,7 +52,6 @@ export class SignUp extends Component {
                                 username: values.email,
                                 password: values.password,
                             })
-                            // console.log(newUser);
                             // await new Promise(resolve => setTimeout(resolve, 1000));
                             // console.log("signup");                           
                             this.setState({ signUpSent: true });
@@ -90,7 +89,7 @@ export class SignUp extends Component {
                                     />
                                 </div>
                                 <p>
-                                    <Link to="/signup/verify">Click here to verify already signed up account</Link>
+                                    <Link to="/signup/verify">Click here to resend confirmation code for already signed up account</Link>
                                 </p>
                             </Form>
                         )}

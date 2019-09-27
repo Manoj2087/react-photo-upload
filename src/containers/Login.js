@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import "./Login.css";
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import { Auth } from "aws-amplify";
 import LoaderButton from "../components/LoaderButton";
 import { Link } from "react-router-dom";
-import { Panel } from "react-bootstrap"
+import { Panel } from "react-bootstrap";
 
 
 const LoginSchema = Yup.object().shape({
@@ -60,9 +60,6 @@ export default class Login extends Component {
                                     <Field name="password" type="password" className={'form-control' + (errors.password && touched.password ? ' is-invalid' : '')} />
                                     <ErrorMessage name="password" component="div" className="invalid-feedback" />
                                 </div>
-                                <p>
-                                    <Link to="/login/reset">Forgot password?</Link>
-                                </p>
                                 <div className="form-group">
                                     <LoaderButton
                                         isLoading={this.state.isLoading}
@@ -73,6 +70,9 @@ export default class Login extends Component {
                                         disabled={false}
                                     />
                                 </div>
+                                <p>
+                                    <Link to="/login/reset">Forgot password?</Link>
+                                </p>
                             </Form>
                         )}
                     </Formik>
