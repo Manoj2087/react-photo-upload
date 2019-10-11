@@ -78,7 +78,9 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 * `npm install -S yup`
 
 ### Feature
-* multi container routing
+* multi container routing using react-route
+    * Authenticated route (in progress)
+    * unathunticated route (in progress)
 * page not found
 * forms through formix and form validation through yup 
     * UserSignup
