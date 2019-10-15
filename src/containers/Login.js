@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import "./Login.css";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -16,16 +16,11 @@ const LoginSchema = Yup.object().shape({
         .required('Required'),
 });
 
-export default class Login extends Component {
-    constructor(props) {
-        super(props)
-    
-        this.state = {
-             isLoading: false
-        }
-    }
 
-    renderLoginForm() {
+export default function Login(props) {
+    const [isLoading, setIsLoading] = useState(false);
+
+    function renderLoginForm() {
         return (
             <div>
                 <Formik
@@ -35,16 +30,16 @@ export default class Login extends Component {
                     }}
                     validationSchema={LoginSchema}
                     onSubmit={async values => {
-                        this.setState({ isLoading: true });
+                        setIsLoading(true);
                         try {
                             // await new Promise(resolve => setTimeout(resolve, 1000));
                             // console.log("Login");
                             await Auth.signIn(values.email, values.password);
-                            this.props.userHasAuthenticated(true);
-                            this.props.history.push("/");
+                            props.userHasAuthenticated(true);
+                            props.history.push("/");
                           } catch (e) {
                             alert(e.message);
-                            this.setState({ isLoading: false });
+                            setIsLoading(false);
                         }
                       }}
                     >
@@ -62,7 +57,7 @@ export default class Login extends Component {
                                 </div>
                                 <div className="form-group">
                                     <LoaderButton
-                                        isLoading={this.state.isLoading}
+                                        isLoading={isLoading}
                                         text="Login"
                                         loadingText="Loggin in.."
                                         type="submit"
@@ -79,19 +74,19 @@ export default class Login extends Component {
             </div>
         );
     }
-    
-    render() { 
-        return (
+
+    return (
+        <div>
             <div className="Login">
                 <Panel>
                     <Panel.Heading>
                     <Panel.Title>Login</Panel.Title>
                     </Panel.Heading>
                     <Panel.Body>
-                        { this.renderLoginForm() }
+                        { renderLoginForm() }
                     </Panel.Body>
                 </Panel>
             </div>
-        );
-    }
+        </div>
+    )
 }
