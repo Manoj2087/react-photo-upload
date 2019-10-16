@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import "./ResetPassword.css";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -22,20 +22,13 @@ const ConfirmationFormSchema = Yup.object().shape({
         .oneOf([Yup.ref('password'), null], 'Passwords must match'),
 });
 
+export default function ResetPassword(props) {
+    const [codeSent, setCodeSent] = useState(false);
+    const [confirm, setConfirm] = useState(false);
+    const [isSendingCode, setIsSendingCode] = useState(false);
+    const [isConfirming, setIsConfirming] = useState(false);
 
-export class ResetPassword extends Component {
-    constructor(props) {
-        super(props)
-    
-        this.state = {
-            codeSent: false,
-            confirm: false,
-            isSendingCode: false,
-            isConfirming: false,
-        }
-    }
-
-    renderRequestCodeForm() {
+    function renderRequestCodeForm() {
         return (
             <Formik
                 initialValues={{
@@ -46,15 +39,15 @@ export class ResetPassword extends Component {
                 }}
                 validationSchema={RequestCodeFormSchema}
                 onSubmit={async values => {
-                    this.setState({isSendingCode: true})
+                    setIsSendingCode(true);
                     try {
                         await Auth.forgotPassword(values.email);
                         // await new Promise(resolve => setTimeout(resolve, 1000));
                         // console.log("sent");
-                        this.setState({ codeSent: true });                       
+                        setCodeSent(true);                       
                     } catch (e) {
                         alert(e.message);
-                        this.setState({isSendingCode: false})
+                        setIsSendingCode(false);
                     }                    
                 }}
             >
@@ -67,7 +60,7 @@ export class ResetPassword extends Component {
                         </div>
                         <div className="form-group">
                             <LoaderButton
-                                isLoading={this.state.isSendingCode}
+                                isLoading={isSendingCode}
                                 text="Send Confirmation"
                                 loadingText="Sending..."
                                 type="submit"
@@ -81,12 +74,12 @@ export class ResetPassword extends Component {
         );
     }
 
-    renderConfirmationForm() {
+    function renderConfirmationForm() {
         return (
             <Formik
                 validationSchema={ConfirmationFormSchema}
                 onSubmit={async values => {
-                    this.setState({isConfirming: true})
+                    setIsConfirming();
                     try {
                         console.log(values);
                         await Auth.forgotPasswordSubmit(
@@ -96,10 +89,10 @@ export class ResetPassword extends Component {
                         );
                         // await new Promise(resolve => setTimeout(resolve, 1000));
                         // console.log("Confirm");
-                        this.setState({ confirm: true });                    
+                        setConfirm(true);                    
                     } catch (e) {
                         alert(e.message);
-                        this.setState({isConfirming: true});
+                        setIsConfirming(true);
                     }                    
                 }}
             >
@@ -125,7 +118,7 @@ export class ResetPassword extends Component {
                         </div>
                         <div className="form-group">
                             <LoaderButton
-                                isLoading={this.state.isLoading}
+                                isLoading={isConfirming}
                                 text="Confirm"
                                 loadingText="Confirm..."
                                 type="submit"
@@ -139,7 +132,7 @@ export class ResetPassword extends Component {
         );
     }
 
-    renderSuccessMessage() {
+    function renderSuccessMessage() {
         return(
             <div className="success"> 
                 <Glyphicon glyph="ok-sign" />
@@ -153,26 +146,23 @@ export class ResetPassword extends Component {
         );
     }
 
-    render() {
-        return (
-            <div className="ResetPassword">
-                <Panel>
-                    <Panel.Heading>
-                    <Panel.Title>Reset Password</Panel.Title>
-                    </Panel.Heading>
-                    <Panel.Body>
-                        {
-                            !this.state.codeSent 
-                                ? this.renderRequestCodeForm()
-                                : !this.state.confirm
-                                    ? this.renderConfirmationForm()
-                                    : this.renderSuccessMessage()
-                        }
-                    </Panel.Body>
-                </Panel>
-            </div>
-        )
-    }
-}
 
-export default ResetPassword
+    return (
+        <div className="ResetPassword">
+            <Panel>
+                <Panel.Heading>
+                <Panel.Title>Reset Password</Panel.Title>
+                </Panel.Heading>
+                <Panel.Body>
+                    {
+                        !codeSent 
+                            ? renderRequestCodeForm()
+                            : !confirm
+                                ? renderConfirmationForm()
+                                : renderSuccessMessage()
+                    }
+                </Panel.Body>
+            </Panel>
+        </div>
+    )
+}
