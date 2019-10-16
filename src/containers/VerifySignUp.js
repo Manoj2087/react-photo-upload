@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import "./VerifySignUp.css";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -18,19 +18,13 @@ const SubmitVerificationSchema = Yup.object().shape({
         .required('Required'),        
 });
 
-export class VerifySignUp extends Component {
-    constructor(props) {
-        super(props)
-    
-        this.state = {
-             resendVerification: false,
-             isResendingVerification: false,
-             submitVerification: false,
-             isSubmittingVerification: false,
-        }
-    }
+export default function VerifySignUp() {
+    const [resendVerification, setResendVerification] = useState(false);
+    const [isResendingVerification, setIsResendingVerification] = useState(false);
+    const [submitVerification, setSubmitVerification] = useState(false);
+    const [isSubmittingVerification, setIsSubmittingVerification] = useState(false);    
 
-    renderResendVerificationForm() {
+    function renderResendVerificationForm() {
         return (
             <Formik
                 initialValues={{
@@ -39,15 +33,15 @@ export class VerifySignUp extends Component {
                 }}
                 validationSchema={ResendVerificationSchema}
                 onSubmit={async values => {
-                    this.setState({ isResendingVerification: true });
+                    setIsResendingVerification(true);
                     try {
                         // await new Promise(resolve => setTimeout(resolve, 1000));
                         // console.log("Verify");
                         await Auth.resendSignUp(values.email);
-                        this.setState({ resendVerification: true })
+                        setResendVerification(true);
                     } catch (e) {
                         alert(e.message);
-                        this.setState({ isResendingVerification: false })
+                        setIsResendingVerification(false);
                     }
                 }}
             >
@@ -60,7 +54,7 @@ export class VerifySignUp extends Component {
                         </div>
                         <div className="form-group">
                             <LoaderButton
-                                isLoading={this.state.isResendingVerification}
+                                isLoading={isResendingVerification}
                                 text="Resend Verification Code"
                                 loadingText="Resending Verification Code..."
                                 type="submit"
@@ -74,20 +68,20 @@ export class VerifySignUp extends Component {
         )
     }
 
-    renderSubmitVerificationForm() {
+    function renderSubmitVerificationForm() {
         return (
             <Formik
                 validationSchema={SubmitVerificationSchema}
                 onSubmit={async values => {
-                    this.setState({ isSubmittingVerification: true });
+                    setIsSubmittingVerification(true);
                     try {
                         // await new Promise(resolve => setTimeout(resolve, 1000));
                         // console.log("Verify");
                         await Auth.confirmSignUp(values.email, values.code);
-                        this.setState({ submitVerification: true })
+                        setSubmitVerification(true);
                     } catch (e) {
                         alert(e.message);
-                        this.setState({ isSubmittingVerification: false })
+                        setIsSubmittingVerification(false);
                     }
                 }}
             >
@@ -103,7 +97,7 @@ export class VerifySignUp extends Component {
                         </div>
                         <div className="form-group">
                             <LoaderButton
-                                isLoading={this.state.isSubmittingVerification}
+                                isLoading={isSubmittingVerification}
                                 text="Verify"
                                 loadingText="Verifing..."
                                 type="submit"
@@ -117,7 +111,7 @@ export class VerifySignUp extends Component {
         )
     }
 
-    renderSuccessMessage() {
+    function renderSuccessMessage() {
         return(
             <div className="success"> 
                 <Glyphicon glyph="ok-sign" />
@@ -130,27 +124,23 @@ export class VerifySignUp extends Component {
             </div>
         );
     }
-    
-    render() {
-        return (
-            <div className="SignUp">
-                <Panel>
-                    <Panel.Heading>
-                    <Panel.Title>Sign Up Confirmation</Panel.Title>
-                    </Panel.Heading>
-                    <Panel.Body>
-                        { 
-                            !this.state.resendVerification
-                                ? this.renderResendVerificationForm()
-                                : !this.state.submitVerification
-                                    ? this.renderSubmitVerificationForm()
-                                    : this.renderSuccessMessage()
-                        }
-                    </Panel.Body>
-                </Panel>
-            </div>
-        )
-    }
-}
 
-export default VerifySignUp
+    return (
+        <div className="SignUp">
+            <Panel>
+                <Panel.Heading>
+                <Panel.Title>Sign Up Confirmation</Panel.Title>
+                </Panel.Heading>
+                <Panel.Body>
+                    { 
+                        !resendVerification
+                            ? renderResendVerificationForm()
+                            : !submitVerification
+                                ? renderSubmitVerificationForm()
+                                : renderSuccessMessage()
+                    }
+                </Panel.Body>
+            </Panel>
+        </div>
+    )
+}
