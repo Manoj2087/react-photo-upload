@@ -1,7 +1,7 @@
 import React from 'react';
 import "./Home.css";
 
-function Home() {
+export default function Home() {
     return (
         <div>
             <div className="Home">
@@ -11,5 +11,3 @@ function Home() {
         </div>
     )
 }
-
-export default Home

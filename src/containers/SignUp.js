@@ -22,7 +22,7 @@ const SignUpConfirmationSchema = Yup.object().shape({
         .required('Required'),
 });
 
-function SignUp(props) {
+export default function SignUp(props) {
     const [signUpSent, setSignUpSent] = useState(false);
     const [isSendingSignUp, setIsSendingSignUp] = useState(false);
     const [isSendingConfirmation, setIsSendingConfirmation] = useState(false);
@@ -155,5 +155,3 @@ function SignUp(props) {
         </div>
     )
 }
-
-export default SignUp

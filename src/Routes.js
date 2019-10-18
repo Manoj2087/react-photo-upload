@@ -9,16 +9,16 @@ import SignUp from "./containers/SignUp";
 import VerifySignUp from "./containers/VerifySignUp";
 import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
 
-export default function Routes({ childProps }) {
+export default function Routes({ appProps }) {
     return (
         <Switch>
-            <AppliedRoute path="/" exact component={Home} props={childProps} />
-            <UnauthenticatedRoute path="/login" exact component={ Login } props={childProps} />
-            <UnauthenticatedRoute path="/login/reset" exact component={ ResetPassword } props={childProps} />
-            <UnauthenticatedRoute path="/signup" exact component={ SignUp } props={childProps} />
-            <UnauthenticatedRoute path="/signup/verify" exact component={ VerifySignUp } props={childProps} />
+            <AppliedRoute path="/" exact component={Home} appProps={appProps} />
+            <UnauthenticatedRoute path="/login" exact component={ Login } appProps={appProps} />
+            <UnauthenticatedRoute path="/login/reset" exact component={ ResetPassword } appProps={appProps} />
+            <UnauthenticatedRoute path="/signup" exact component={ SignUp } appProps={appProps} />
+            <UnauthenticatedRoute path="/signup/verify" exact component={ VerifySignUp } appProps={appProps} />
             {/* Finally, catch all unmatched routes */}
             <Route component={ PageNotFound } />
         </Switch>
-    )
+    );
 }
