@@ -1,10 +1,11 @@
 import React from 'react'
 import { Route } from "react-router-dom"
 
-export default function AppliedRoute({ component: C, props: cProps, ...rest }) {
+export default function AppliedRoute({ component: Component, appProps, ...rest }) {
     return (
-        <div>
-            <Route {...rest} render={props => <C {...props} {...cProps} />} />
-        </div>        
+        <Route {...rest} render={props => 
+                <Component {...props} {...appProps} />
+            } 
+        />
     )
 }

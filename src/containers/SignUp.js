@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import "./SignUp.css";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -22,19 +22,12 @@ const SignUpConfirmationSchema = Yup.object().shape({
         .required('Required'),
 });
 
-export class SignUp extends Component {
-    constructor(props) {
-        super(props)
+export default function SignUp(props) {
+    const [signUpSent, setSignUpSent] = useState(false);
+    const [isSendingSignUp, setIsSendingSignUp] = useState(false);
+    const [isSendingConfirmation, setIsSendingConfirmation] = useState(false);
 
-        this.state = {
-            signUpSent: false,
-            isSendingSignUp: false,
-            confirmationSent: false,
-            isSendingConfirmation: false,
-        }
-    }
-
-    renderSignUpForm() {
+    function renderSignUpForm() {
         return (
             <div>
                 <Formik
@@ -46,7 +39,7 @@ export class SignUp extends Component {
                     }}
                     validationSchema={SignUpSchema}
                     onSubmit={async values => {
-                        this.setState({ isSendingSignUp: true });
+                        setIsSendingSignUp(true);
                         try {
                             await Auth.signUp({
                                 username: values.email,
@@ -54,10 +47,10 @@ export class SignUp extends Component {
                             })
                             // await new Promise(resolve => setTimeout(resolve, 1000));
                             // console.log("signup");                           
-                            this.setState({ signUpSent: true });
+                            setSignUpSent(true);
                           } catch (e) {
                             alert(e.message);
-                            this.setState({ isSendingSignUp: false });
+                            setIsSendingSignUp(false);
                         }
                       }}
                     >
@@ -80,7 +73,7 @@ export class SignUp extends Component {
                                 </div>
                                 <div className="form-group">
                                     <LoaderButton
-                                        isLoading={this.state.isSendingSignUp}
+                                        isLoading={isSendingSignUp}
                                         text="Sign Up"
                                         loadingText="Signing Up..."
                                         type="submit"
@@ -98,24 +91,23 @@ export class SignUp extends Component {
         );
     }
 
-    renderSignUpConfirmationForm() {
+    function renderSignUpConfirmationForm() {
         return (
             <div>
                 <Formik
                     validationSchema={SignUpConfirmationSchema}
                     onSubmit={async values => {
-                        this.setState({ isSendingConfirmation: true });
+                        setIsSendingConfirmation(true);
                         try {
                             // await new Promise(resolve => setTimeout(resolve, 1000));
                             // console.log("signup confirmation");
                             await Auth.confirmSignUp(values.email, values.code);
                             await Auth.signIn(values.email, values.password);
-                            this.setState({ confirmationSent: true });
-                            this.props.userHasAuthenticated(true);
-                            this.props.history.push("/");
+                            props.userHasAuthenticated(true);
+                            props.history.push("/");
                           } catch (e) {
                             alert(e.message);
-                            this.setState({ isSendingConfirmation: false });
+                            setIsSendingConfirmation(false);
                         }
                       }}
                     >
@@ -131,7 +123,7 @@ export class SignUp extends Component {
                                 </div>
                                 <div className="form-group">
                                     <LoaderButton
-                                        isLoading={this.state.isSendingConfirmation}
+                                        isLoading={isSendingConfirmation}
                                         text="Verify"
                                         loadingText="Verifing..."
                                         type="submit"
@@ -146,24 +138,20 @@ export class SignUp extends Component {
         );
     }
 
-    render() {
-        return (
-            <div className="SignUp">
-                <Panel>
-                    <Panel.Heading>
-                    <Panel.Title>Sign Up</Panel.Title>
-                    </Panel.Heading>
-                    <Panel.Body>
-                        { 
-                            !this.state.signUpSent
-                                ? this.renderSignUpForm()
-                                : this.renderSignUpConfirmationForm()
-                        }
-                    </Panel.Body>
-                </Panel>
-            </div>
-        )
-    }
+    return (
+        <div className="SignUp">
+            <Panel>
+                <Panel.Heading>
+                <Panel.Title>Sign Up</Panel.Title>
+                </Panel.Heading>
+                <Panel.Body>
+                    { 
+                        !signUpSent
+                            ? renderSignUpForm()
+                            : renderSignUpConfirmationForm()
+                    }
+                </Panel.Body>
+            </Panel>
+        </div>
+    )
 }
-
-export default SignUp
